@@ -53,10 +53,19 @@ function write_mainView(){
 	document.getElementById("mainView").innerHTML = html;
 }
 
+function wavelength(band) {
+    let wl = parseInt(band.split("m")[0]);
+    if (band.search("cm") > 0) {
+        return wl / 100
+    } else {
+        return wl
+    }
+}
+
 function refreshAll(){
 	ribbon.registerActiveBandsAndModes();
 	mode = ribbon.getWatchedMode();
-	bands = Array.from(ribbon.getActiveBands());
+	bands = Array.from(ribbon.getActiveBands()).sort((a, b) => wavelength(b) - wavelength(a));
 //	console.log("Refresh with mode = "+ mode+ " myCall1 = "+myCall1 + " bands = "+bands);
 	refreshBands();
 }
