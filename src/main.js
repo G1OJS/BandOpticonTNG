@@ -36,7 +36,6 @@ connectToFeed();
 function write_mainView(){
 	let html = "<h3>Bands Overview</h3>";
 
-	html +="<div id='canvasGrid'>";
 	html +="<div class='gridHeader'><div id='legendOverview'>";
 	html +="<div><b>Receive:</b> </div>";
 	html +="<div class = 'noPadding'><span class = 'legendMarker' style='background:" +  colors.myCall_rx + "'></span>"+myCall1+"</div>";
@@ -47,6 +46,8 @@ function write_mainView(){
 	html +="<div><span class = 'legendMarker' style='background:" +  colors.leader_tx + "'></span>Band leader</div>";
 	html +="<div><span class = 'legendMarker' style='background:" +  colors.all_tx + "'></span>All home</div>";
 	html +="</div></div>";
+
+	html +="<div id='canvasSpace'>";
  	for (let i =0;i<15;i++){
 		html += "<div class = 'canvasHolder hidden' id = 'div_"+i+"'><canvas class='hidden' id='canvas_"+i+"'></canvas></div>";	
 	}	
@@ -68,6 +69,7 @@ function refreshAll(){
 	ribbon.registerActiveBandsAndModes();
 	mode = ribbon.getWatchedMode();
 	bands = Array.from(ribbon.getActiveBands()).sort((a, b) => wavelength(b) - wavelength(a));
+//	bands = ["20m"];
 //	console.log("Refresh with mode = "+ mode+ " myCall1 = "+myCall1 + " bands = "+bands);
 	refreshBands();
 }
@@ -109,16 +111,18 @@ function analyseData(data){
 function refreshBands(){
 	for (let i =0;i<15;i++){
 		let div = 'div_'+i;
-		document.getElementById(div).classList.add("hidden");	
 		let canvas = 'canvas_'+i;
+		document.getElementById(div).classList.add("hidden");	
+		document.getElementById(canvas).classList.add("hidden");	
 		if(charts[canvas]){
 			charts[canvas].destroy()
 		}
 	}
 	for (const bandIdx in bands){
-		let div = 'div_'+bandIdx;
-		document.getElementById(div).classList.remove("hidden");			
+		document.getElementById('div_'+bandIdx).classList.remove("hidden");			
 		let canvas = 'canvas_'+bandIdx;
+		let canvas_el = document.getElementById(canvas)
+		canvas_el.classList.remove("hidden");						
 		let band = bands[bandIdx];
 		refreshBand(canvas,band);
 	}
