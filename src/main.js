@@ -49,7 +49,9 @@ function write_mainView(){
 
 	html +="<div id='canvasSpace'>";
  	for (let i =0;i<15;i++){
-		html += "<div class = 'canvasHolder hidden' id = 'div_"+i+"'><canvas class='hidden' id='canvas_"+i+"'></canvas></div>";	
+		html += "<div class = 'canvasHolder hidden' id = 'div_"+i+"'><div id = 'title_"+i+"'></div>";
+		html += "<canvas class='hidden' id='canvas_"+i+"'></canvas>";
+		html += "</div>";	
 	}	
 	html +="</div>";
 	
@@ -124,16 +126,20 @@ function refreshBands(){
 		let canvas_el = document.getElementById(canvas)
 		canvas_el.classList.remove("hidden");						
 		let band = bands[bandIdx];
-		refreshBand(canvas,band);
+		let title_el = document.getElementById('title_'+bandIdx);
+		refreshBand(canvas,title_el,band);
 	}
 }
 
-function refreshBand(canvas, band){
+function refreshBand(canvas, title_el, band){
 
 	let rx_data =analyseData(liveConnsData[band]?.[mode]?.['Rx']);
 	let tx_data =analyseData(liveConnsData[band]?.[mode]?.['Tx']);
 	
-	let bandInfo = band + " " + rx_data.homeCalls.length + " Rx, leader: " + rx_data.leaderCall +"; " + tx_data.homeCalls.length + " Tx, leader: " + tx_data.leaderCall;
+//	let bandInfo = band + " " + rx_data.homeCalls.length + " Rx, leader: " + rx_data.leaderCall +"; " + tx_data.homeCalls.length + " Tx, leader: " + tx_data.leaderCall;
+	let bandInfo = "<b>"+band + "</b> " + rx_data.homeCalls.length + " Rx, " + tx_data.homeCalls.length + " Tx";
+	
+	title_el.innerHTML = "<div class = 'bandTileTitle'>" +bandInfo+ "</div>";
 	
 	const data = {
 	  datasets: [	
@@ -153,13 +159,13 @@ function refreshBand(canvas, band){
 			{type: 'scatter',data: data, options: {
 				animation: false, 
 				plugins: {	legend: {display:false},             
-							title: {display: true, align:'start', text: " "+bandInfo}},
+							title: {display: false, align:'start', text: " "+bandInfo}},
 				scales: {
 					x: {display:false, title: {display:false, text: 'Longitude'}, type: 'linear',position: 'bottom' , max:180, min:-180},
-					y: {display:false, title: {display:false, text: 'Lattitude'}, type: 'linear',position: 'left', max:80, min: -80}
+					y: {display:false, title: {display:false, text: 'Lattitude'}, type: 'linear',position: 'left', max:90, min: -90}
 				}
 			}
 		}
 	);	
-	
+
 }
