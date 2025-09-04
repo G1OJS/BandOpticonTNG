@@ -5,8 +5,8 @@ import {mhToLatLong} from './geo.js';
 import Ribbon from './ribbon.js';
 
 
-const colors = {myCall_tx:'rgba(255, 20, 20, 1)', leader_tx:'rgba(255, 99, 132, .5)', all_tx:'rgba(255, 99, 132, 0.3)',
-				myCall_rx:'rgba(20, 20, 200, 1)', leader_rx:'rgba(54, 162, 200, 0.5)',all_rx:'rgba(54, 162, 200, 0.3)'};
+const colors = {myCall_tx:'rgba(255, 20, 20, 1)', leader_tx:'rgba(255, 99, 132, 0.4)', all_tx:'rgba(255, 99, 132, 0.1)',
+				myCall_rx:'rgba(20, 20, 200, 1)', leader_rx:'rgba(54, 162, 200, 0.4)',all_rx:'rgba(54, 162, 200, 0.1)'};
 
 const ribbon = new Ribbon({
   onModeChange: refreshAll,
@@ -34,19 +34,21 @@ write_mainView();
 connectToFeed();
 
 function write_mainView(){
-	let html = "<h3>Tx and Rx performance for all callsigns in home squares with band leader and "+myCall1+" overlaid</h3>";
+	let html = "<h3>Bands Overview</h3>";
 
 	html +="<div id='canvasGrid'>";
-	html +="<div class='gridHeader'><table><tr><td colspan='3'>Receive</td><td colspan='3'>Transmit</td></tr><tr>";
-	html +="<td><span class = 'legendMarker' style='background:" +  colors.myCall_rx + "'></span>"+myCall1+"</td>";
-	html +="<td><span class = 'legendMarker' style='background:" +  colors.leader_rx + "'></span>Band leader</td>";
-	html +="<td><span class = 'legendMarker' style='background:" +  colors.all_rx + "'></span>All home  </td>";
-	html +="<td><span class = 'legendMarker' style='background:" +  colors.myCall_tx + "'></span>"+myCall1+"</td>";
-	html +="<td><span class = 'legendMarker' style='background:" +  colors.leader_tx + "'></span>Band leader</td>";
-	html +="<td><span class = 'legendMarker' style='background:" +  colors.all_tx + "'></span>All home</td>";
-	html +="</tr></table></div>";
+	html +="<div class='gridHeader'><div id='legendOverview'>";
+	html +="<div><b>Receive:</b> </div>";
+	html +="<div class = 'noPadding'><span class = 'legendMarker' style='background:" +  colors.myCall_rx + "'></span>"+myCall1+"</div>";
+	html +="<div><span class = 'legendMarker' style='background:" +  colors.leader_rx + "'></span>Band leader</div>";
+	html +="<div><span class = 'legendMarker' style='background:" +  colors.all_rx + "'></span>All home  </div>";
+	html +="<div> </div><div><b>Transmit:</b> </div>";
+	html +="<div><span class = 'legendMarker' style='background:" +  colors.myCall_tx + "'></span>"+myCall1+"</div>";
+	html +="<div><span class = 'legendMarker' style='background:" +  colors.leader_tx + "'></span>Band leader</div>";
+	html +="<div><span class = 'legendMarker' style='background:" +  colors.all_tx + "'></span>All home</div>";
+	html +="</div></div>";
  	for (let i =0;i<15;i++){
-		html += "<div class = 'canvasHolder hidden' id = 'div_"+i+"'><canvas id='canvas_"+i+"'></canvas></div>";	
+		html += "<div class = 'canvasHolder hidden' id = 'div_"+i+"'><canvas class='hidden' id='canvas_"+i+"'></canvas></div>";	
 	}	
 	html +="</div>";
 	
@@ -77,7 +79,7 @@ function analyseData(data){
 	let ocs_myCall1 = new Set();
 	let ocs_Leader = new Set();
 	let ocs_All = new Set();
-	let leaderCall = null;
+	let leaderCall = '';
 	
 	for (const hc in data) {
 		homeCalls.add(hc);
@@ -127,14 +129,16 @@ function refreshBand(canvas, band){
 	let rx_data =analyseData(liveConnsData[band]?.[mode]?.['Rx']);
 	let tx_data =analyseData(liveConnsData[band]?.[mode]?.['Tx']);
 	
+	let bandInfo = band + " " + rx_data.homeCalls.length + " Rx, leader: " + rx_data.leaderCall +"; " + tx_data.homeCalls.length + " Tx, leader: " + tx_data.leaderCall;
+	
 	const data = {
 	  datasets: [	
-				{	label:'All', 				data: rx_data.All, 		backgroundColor: colors.leader_rx, 	pointRadius:9	},
-				{	label:'All', 				data: tx_data.All, 		backgroundColor: colors.all_tx, 	pointRadius:9	},
+				{	label:myCall1, 				data: rx_data.myCall1, 	backgroundColor: colors.myCall_rx, 	pointRadius:3	},
+				{	label:myCall1, 				data: tx_data.myCall1, 	backgroundColor: colors.myCall_tx, 	pointRadius:3	},
 				{	label:rx_data.leaderCall, 	data: rx_data.Leader, 	backgroundColor: colors.leader_rx, 	pointRadius:5	},
 				{	label:tx_data.leaderCall, 	data: tx_data.Leader,	backgroundColor: colors.leader_tx, 	pointRadius:5	},
-				{	label:myCall1, 				data: rx_data.myCall1, 	backgroundColor: colors.myCall_rx, 	pointRadius:3	},
-				{	label:myCall1, 				data: tx_data.myCall1, 	backgroundColor: colors.myCall_tx, 	pointRadius:3	}
+				{	label:'All', 				data: rx_data.All, 		backgroundColor: colors.leader_rx, 	pointRadius:9	},
+				{	label:'All', 				data: tx_data.All, 		backgroundColor: colors.all_tx, 	pointRadius:9	}
 				],
 	};
 	if(charts[canvas]){
@@ -145,7 +149,7 @@ function refreshBand(canvas, band){
 			{type: 'scatter',data: data, options: {
 				animation: false, 
 				plugins: {	legend: {display:false},             
-							title: {display: true, align:'start', text: " "+band}},
+							title: {display: true, align:'start', text: " "+bandInfo}},
 				scales: {
 					x: {display:false, title: {display:false, text: 'Longitude'}, type: 'linear',position: 'bottom' , max:180, min:-180},
 					y: {display:false, title: {display:false, text: 'Lattitude'}, type: 'linear',position: 'left', max:80, min: -80}
@@ -153,4 +157,5 @@ function refreshBand(canvas, band){
 			}
 		}
 	);	
+	
 }
