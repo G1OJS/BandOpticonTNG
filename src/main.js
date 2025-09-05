@@ -7,6 +7,12 @@ import Ribbon from './ribbon.js';
 
 const colors = {myCall_tx:'rgba(255, 20, 20, 1)', leader_tx:'rgba(255, 99, 132, 0.4)', all_tx:'rgba(255, 99, 132, 0.1)',
 				myCall_rx:'rgba(20, 20, 200, 1)', leader_rx:'rgba(54, 162, 200, 0.4)',all_rx:'rgba(54, 162, 200, 0.1)'};
+				
+//'4000m','2200m','600m',
+//'160m','80m','60m','40m','30m','20m','17m','15m','12m','11m','10m',
+//'8m','6m','5m','4m','2m','1.25m',
+//'70cm','33cm','23cm',
+//'2.4Ghz','3.4Ghz','5.8Ghz','10Ghz','24Ghz','47Ghz','76Ghz'
 
 const ribbon = new Ribbon({
   onModeChange: refreshAll,
@@ -36,16 +42,17 @@ connectToFeed();
 function write_mainView(){
 	let html = "<h3>Bands Overview</h3>";
 
-	html +="<div class='gridHeader'><div id='legendOverview'>";
+	html +="<div class = 'mainViewLegend'>";
 	html +="<div><b>Receive:</b> </div>";
-	html +="<div class = 'noPadding'><span class = 'legendMarker' style='background:" +  colors.myCall_rx + "'></span>"+myCall1+"</div>";
+	html +="<div><span class = 'legendMarker' style='background:" +  colors.myCall_rx + "'></span>"+myCall1+"</div>";
 	html +="<div><span class = 'legendMarker' style='background:" +  colors.leader_rx + "'></span>Band leader</div>";
 	html +="<div><span class = 'legendMarker' style='background:" +  colors.all_rx + "'></span>All home  </div>";
-	html +="<div> </div><div><b>Transmit:</b> </div>";
+	html +="<div> </div>";
+	html +="<div><b>Transmit:</b> </div>";
 	html +="<div><span class = 'legendMarker' style='background:" +  colors.myCall_tx + "'></span>"+myCall1+"</div>";
 	html +="<div><span class = 'legendMarker' style='background:" +  colors.leader_tx + "'></span>Band leader</div>";
 	html +="<div><span class = 'legendMarker' style='background:" +  colors.all_tx + "'></span>All home</div>";
-	html +="</div></div>";
+	html +="</div>";
 
 	html +="<div id='canvasSpace'>";
  	for (let i =0;i<15;i++){
