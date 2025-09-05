@@ -155,9 +155,13 @@ function refreshBand(canvas, title_el, band){
 				{	label:'All', 				data: tx_data.All, 		backgroundColor: colors.all_tx, 	pointRadius:9	}
 				],
 	};
+	
 	if(charts[canvas]){
 		charts[canvas].destroy()
 	}
+	
+	
+	
 	charts[canvas] = new Chart(
 			document.getElementById(canvas),
 			{type: 'scatter',data: data, options: {

@@ -116,7 +116,7 @@ button:hover:not(.active)
 					
 input 				{border:none;}
 label 				{font-size: var(--font-size-sm); }
-.settings-label 	{font-size: var(--font-size-sm);  font-weight: 600; color: var(--main-font-color); padding-right:3px; }
+.settings-label 	{font-size: var(--font-size-sm); font-weight: 600; color: var(--main-font-color); padding-right:3px; }
 .settings-input		{font-size: var(--font-size-sm); border: 1px solid var(--border-color); border-radius:6px; padding-top:1px; margin-top:2px; }
 .settings-input:invalid 
 					{border-color: #e66;background-color: #fee;}
@@ -134,7 +134,7 @@ label 				{font-size: var(--font-size-sm); }
 
 #canvasSpace 		{display:grid; grid-template-columns:1fr 1fr 1fr; height:100%; width:100%; gap:5px; }
 .canvasHolder 		{background-color: var(--light-paper-color); padding:0px; padding-bottom:0px; min-width:0;}
-canvas 				{background-color:var(--main-paper-color);}
+canvas 				{background-image:url('./map/map1.png'); background-size: 100% 100%}
 .bandTileTitle 		{font-size: var(--font-size-sm); background-color:var(--main-paper-color); padding-left:4px;}
 
 #footer 			{display: grid; grid-template-columns: auto auto auto; grid-template-rows: auto; gap: var(--spacing-sm); }
