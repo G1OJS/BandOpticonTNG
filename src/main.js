@@ -43,15 +43,15 @@ function write_mainView(){
 	let html = "<h3>Bands Overview</h3>";
 
 	html +="<div class = 'mainViewLegend'>";
-	html +="<div><b>Receive:</b> </div>";
-	html +="<div><span class = 'legendMarker' style='background:" +  colors.myCall_rx + "'></span>"+myCall1+"</div>";
-	html +="<div><span class = 'legendMarker' style='background:" +  colors.leader_rx + "'></span>Band leader</div>";
-	html +="<div><span class = 'legendMarker' style='background:" +  colors.all_rx + "'></span>All home  </div>";
-	html +="<div> </div>";
-	html +="<div><b>Transmit:</b> </div>";
-	html +="<div><span class = 'legendMarker' style='background:" +  colors.myCall_tx + "'></span>"+myCall1+"</div>";
-	html +="<div><span class = 'legendMarker' style='background:" +  colors.leader_tx + "'></span>Band leader</div>";
-	html +="<div><span class = 'legendMarker' style='background:" +  colors.all_tx + "'></span>All home</div>";
+	html +="<div class = 'mainViewLegendItem'><b>Receive:</b> </div>";
+	html +="<div class = 'mainViewLegendItem'><span class = 'legendMarker' style='background:" +  colors.myCall_rx + "'></span>"+myCall1+"</div>";
+	html +="<div class = 'mainViewLegendItem'><span class = 'legendMarker' style='background:" +  colors.leader_rx + "'></span>Band leader</div>";
+	html +="<div class = 'mainViewLegendItem'><span class = 'legendMarker' style='background:" +  colors.all_rx + "'></span>All home  </div>";
+	html +="<div class = 'mainViewLegendItem' style='width:50px;'>&nbsp </div>";
+	html +="<div class = 'mainViewLegendItem'><b>Transmit:</b> </div>";
+	html +="<div class = 'mainViewLegendItem'><span class = 'legendMarker' style='background:" +  colors.myCall_tx + "'></span>"+myCall1+"</div>";
+	html +="<div class = 'mainViewLegendItem'><span class = 'legendMarker' style='background:" +  colors.leader_tx + "'></span>Band leader</div>";
+	html +="<div class = 'mainViewLegendItem'><span class = 'legendMarker' style='background:" +  colors.all_tx + "'></span>All home</div>";
 	html +="</div>";
 
 	html +="<div id='canvasSpace'>";
@@ -78,8 +78,6 @@ function refreshAll(){
 	ribbon.registerActiveBandsAndModes();
 	mode = ribbon.getWatchedMode();
 	bands = Array.from(ribbon.getActiveBands()).sort((a, b) => wavelength(b) - wavelength(a));
-//	bands = ["20m"];
-//	console.log("Refresh with mode = "+ mode+ " myCall1 = "+myCall1 + " bands = "+bands);
 	refreshBands();
 }
 
@@ -118,23 +116,22 @@ function analyseData(data){
 }
 
 function refreshBands(){
-	for (let i =0;i<15;i++){
-		let div = 'div_'+i;
-		let canvas = 'canvas_'+i;
-		document.getElementById(div).classList.add("hidden");	
-		document.getElementById(canvas).classList.add("hidden");	
+	if(!bands) return;
+	for (let bandIdx =0;bandIdx<15;bandIdx++){
+		let div = 'div_'+bandIdx;
+		let canvas = 'canvas_'+bandIdx;
 		if(charts[canvas]){
 			charts[canvas].destroy()
 		}
-	}
-	for (const bandIdx in bands){
-		document.getElementById('div_'+bandIdx).classList.remove("hidden");			
-		let canvas = 'canvas_'+bandIdx;
-		let canvas_el = document.getElementById(canvas)
-		canvas_el.classList.remove("hidden");						
-		let band = bands[bandIdx];
-		let title_el = document.getElementById('title_'+bandIdx);
-		refreshBand(canvas,title_el,band);
+		if(bandIdx in bands){
+			document.getElementById('div_'+bandIdx).classList.remove("hidden");			
+			let canvas = 'canvas_'+bandIdx;
+			let canvas_el = document.getElementById(canvas)
+			canvas_el.classList.remove("hidden");						
+			let band = bands[bandIdx];
+			let title_el = document.getElementById('title_'+bandIdx);
+			refreshBand(canvas,title_el,band);
+		}
 	}
 }
 

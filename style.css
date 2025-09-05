@@ -122,9 +122,9 @@ label 				{font-size: var(--font-size-sm); }
 					{border-color: #e66;background-color: #fee;}
 .ribbonBox 			{height:100px;}
 
-#mainView 			{min-height:0px;}
-.mainViewLegend		{width:100%; display:grid; grid-template-columns: repeat(4, max-content) 20px repeat(4, max-content) ; 
-					 background:var(--main-paper-color); border: none; padding:3px; margin:0px; margin-bottom:5px;} 
+#mainView 			{min-height:0px; overflow:auto;}
+.mainViewLegend		{display:inline-block; width:100%; background:var(--main-paper-color); padding:3px; margin:0px; margin-bottom:5px;} 
+.mainViewLegendItem {float:left;}
 .legendMarker 		{display:inline-block; width:var(--font-size-sm); height:var(--font-size-sm); 
 					 margin-left:20px; margin-right:2px; border: 1px solid grey;}
 
@@ -132,7 +132,7 @@ label 				{font-size: var(--font-size-sm); }
 .transmit 			{background-color: var(--background-color-transmit);}
 .receive  			{background-color: var(--background-color-receive);}
 
-#canvasSpace 		{display:grid; grid-template-columns:1fr 1fr 1fr 1fr; height:100%; width:100%; gap:5px;}
+#canvasSpace 		{display:grid; grid-template-columns:1fr 1fr 1fr; height:100%; width:100%; gap:5px; }
 .canvasHolder 		{background-color: var(--light-paper-color); padding:0px; padding-bottom:0px; min-width:0;}
 canvas 				{background-color:var(--main-paper-color);}
 .bandTileTitle 		{font-size: var(--font-size-sm); background-color:var(--main-paper-color); padding-left:4px;}
